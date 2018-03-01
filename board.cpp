@@ -162,6 +162,20 @@ int Board::countWhite() {
     return taken.count() - black.count();
 }
 
+int Board::score(Move *m, Side side)
+{
+
+    Board *newboard = this->copy();
+    Side other = (side == BLACK) ? WHITE : BLACK;
+    newboard->doMove(m, side);
+    int diff = newboard->count(side) - newboard->count(other);
+    if (m->corner()) diff += CORNER;
+    else if (m->near_corner()) diff += NEAR_CORNER;
+    else if (m->border()) diff += BORDER;
+    delete newboard;
+    return diff;
+}
+
 /*
  * Sets the board state given an 8x8 char array where 'w' indicates a white
  * piece and 'b' indicates a black piece. Mainly for testing purposes.

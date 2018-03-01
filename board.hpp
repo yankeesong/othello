@@ -1,6 +1,9 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
+#define CORNER (10)
+#define NEAR_CORNER (-8)
+#define BORDER (5)
 #include <bitset>
 #include "common.hpp"
 using namespace std;
@@ -28,7 +31,7 @@ public:
     int count(Side side);
     int countBlack();
     int countWhite();
-
+    int score(Move *m, Side side);
     void setBoard(char data[]);
 };
 
