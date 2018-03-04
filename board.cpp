@@ -162,18 +162,26 @@ int Board::countWhite() {
     return taken.count() - black.count();
 }
 
+// only caluclates the score for this move only
+// the most stupid heruistics for testMiniMax
+int Board::test_score(Move *m, Side side) {
+    Board *newboard = this->copy();
+
+    Side other = (side == BLACK) ? WHITE : BLACK;
+    
+    newboard->doMove(m, side);
+
+    int diff = newboard->count(side) - newboard->count(other);
+
+    delete newboard;
+
+    return diff - (this->count(side) - this->count(other));
+}
+
 int Board::score(Move *m, Side side)
 {
-
-    Board *newboard = this->copy();
-    Side other = (side == BLACK) ? WHITE : BLACK;
-    newboard->doMove(m, side);
-    int diff = newboard->count(side) - newboard->count(other);
-    if (m->corner()) diff += CORNER;
-    else if (m->near_corner()) diff += NEAR_CORNER;
-    else if (m->border()) diff += BORDER;
-    delete newboard;
-    return diff;
+    
+    return 0;
 }
 
 /*

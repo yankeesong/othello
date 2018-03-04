@@ -1,12 +1,14 @@
 #ifndef __BOARD_H__
 #define __BOARD_H__
 
-#define CORNER (10)
-#define NEAR_CORNER (-8)
-#define BORDER (5)
 #include <bitset>
 #include "common.hpp"
 using namespace std;
+
+// define values for board positions
+constexpr int CORNER = 10;
+constexpr int NEAR_CORNER = -8;
+constexpr int BORDER = 5;
 
 class Board {
 
@@ -31,7 +33,10 @@ public:
     int count(Side side);
     int countBlack();
     int countWhite();
+
+    int test_score(Move *m, Side side);
     int score(Move *m, Side side);
+
     void setBoard(char data[]);
 };
 
