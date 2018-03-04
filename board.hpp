@@ -10,21 +10,6 @@ constexpr int CORNER = 10;
 constexpr int NEAR_CORNER = -8;
 constexpr int BORDER = 5;
 
-constexpr int VALUE[][8] = 
-	{{10, -3,  5,  5,  5,  5, -3, 10},
-	 {-3, -8, -2, -2, -2, -2, -8, -3},
-	 { 5, -2,  1,  1,  1,  1, -2,  5},
-	 { 5, -2,  1,  1,  1,  1, -2,  5},
-	 { 5, -2,  1,  1,  1,  1, -2,  5},
-	 { 5, -2,  1,  1,  1,  1, -2,  5},
-	 {-3, -8, -2, -2, -2, -2, -8, -3},
-	 {10, -3,  5,  5,  5,  5, -3, 10}};
-
-// all 8 directions
-constexpr int dx[] = {0, -1, -1, -1,  0,  1, 1, 1};
-constexpr int dy[] = {1,  1,  0, -1, -1, -1, 0, 1};
-
-
 class Board {
 
 private:
