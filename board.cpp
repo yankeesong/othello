@@ -180,8 +180,32 @@ int Board::test_score(Move *m, Side side) {
 
 int Board::score(Move *m, Side side)
 {
-    
-    return 0;
+    int ret = VALUE[m->x][m->y];
+
+    for(int i = 0; i < 8; ++i) {
+        int tx = m->x + dx[i], ty = m->y + dy[i];
+
+        int tmp = 0;
+        while (tx >= 0 && tx < 8 && ty >= 0 && ty < 8) {
+            // nothing taken
+            if (!occupied(tx, ty)) {
+                tmp = 0;
+                break;
+            }
+            
+            // same side, then we reach the end of flipping stones
+            if (get(side, tx, ty)) break;
+            // flip stone from the other side
+            else {
+                tmp += VALUE[tx][ty];
+                tx += dx[i], ty += dy[i];
+            }
+        }
+
+        ret += tmp;
+    }
+
+    return ret;
 }
 
 /*
