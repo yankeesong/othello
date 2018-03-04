@@ -168,33 +168,44 @@ int Board::test_score(Move *m, Side side) {
     Board *newboard = this->copy();
 
     Side other = (side == BLACK) ? WHITE : BLACK;
-
+    
     newboard->doMove(m, side);
 
     int diff = newboard->count(side) - newboard->count(other);
 
     delete newboard;
 
-    return diff;
+    return diff - (this->count(side) - this->count(other));
 }
 
 int Board::score(Move *m, Side side)
 {
-  Board *newboard = this->copy();
+    int ret = VALUE[m->x][m->y];
 
-  Side other = (side == BLACK) ? WHITE : BLACK;
+    for(int i = 0; i < 8; ++i) {
+        int tx = m->x + dx[i], ty = m->y + dy[i];
 
-  newboard->doMove(m, side);
+        int tmp = 0;
+        while (tx >= 0 && tx < 8 && ty >= 0 && ty < 8) {
+            // nothing taken
+            if (!occupied(tx, ty)) {
+                tmp = 0;
+                break;
+            }
+            
+            // same side, then we reach the end of flipping stones
+            if (get(side, tx, ty)) break;
+            // flip stone from the other side
+            else {
+                tmp += VALUE[tx][ty];
+                tx += dx[i], ty += dy[i];
+            }
+        }
 
-  int diff = newboard->count(side) - newboard->count(other);
+        ret += tmp;
+    }
 
-  if (m->corner()) diff += CORNER;
-  else if (m->near_corner()) diff += NEAR_CORNER;
-  else if (m->border()) diff += BORDER;
-
-  delete newboard;
-
-  return diff;
+    return ret;
 }
 
 /*

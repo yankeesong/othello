@@ -25,8 +25,6 @@ int main(int argc, char *argv[]) {
     // Initialize player as the white player, and set testing_minimax flag.
     Player *player = new Player(WHITE);
     player->testingMinimax = true;
-
-
     player->board->setBoard(boardData);
 
     // Get player's move and check if it's right.
@@ -43,6 +41,10 @@ int main(int argc, char *argv[]) {
         }
         std::cout << ", expected (1, 1)" << std::endl;
     }
+    
+    delete move;
+    delete player;
+    delete board;
 
     return 0;
 }

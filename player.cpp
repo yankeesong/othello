@@ -21,7 +21,7 @@ Player::Player(Side side) {
  * Destructor for the player.
  */
 Player::~Player() {
-  delete this->board;
+    delete this->board;
 }
 
 /*
@@ -38,108 +38,109 @@ Player::~Player() {
  * return nullptr.
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
-  if (testingMinimax == false)
-  {
+    /* the greedy method
+       Move * move = new Move(0, 0);
+       Side oppo;
+       if (this->side == BLACK) oppo = WHITE;
+       else oppo = BLACK;
+
+
+       this->board->doMove(opponentsMove, oppo);
+
+
+
+       if (!this->board->hasMoves(this->side)) return nullptr;
+
+       int bestx = 0;
+       int besty = 0;
+       int bestscore = -100;
+       for (int x = 0; x < 8; x++)
+       {
+       for (int y = 0; y < 8; y++)
+       {
+       move->setX(x);
+       move->setY(y);
+
+       if (this->board->checkMove(move, this->side))
+       {
+       int diff = this->board->score(move, side);
+       if (diff > bestscore)
+       {
+       bestx = x;
+       besty = y;
+       bestscore = diff;
+       }
+       }
+       }
+       }
+       move->setX(bestx);
+       move->setY(besty);
+       this->board->doMove(move, this->side);
+       return move;
+       */
     Move * move = new Move(0, 0);
-    Side oppo;
-    if (this->side == BLACK) oppo = WHITE;
-    else oppo = BLACK;
+    Move * next = new Move(0, 0);
+    Side other;
+    if (this->side == BLACK) other = WHITE;
+    else other = BLACK;
 
-
-    this->board->doMove(opponentsMove, oppo);
-
-
+    this->board->doMove(opponentsMove, other);
 
     if (!this->board->hasMoves(this->side)) return nullptr;
 
     int bestx = 0;
     int besty = 0;
-    int bestscore = -100;
+    int minimax = -LARGE;
+    
     for (int x = 0; x < 8; x++)
     {
-      for (int y = 0; y < 8; y++)
-      {
-        move->setX(x);
-        move->setY(y);
-
-        if (this->board->checkMove(move, this->side))
+        for (int y = 0; y < 8; y++)
         {
-          int diff = this->board->score(move, side);
-          if (diff > bestscore)
-          {
-            bestx = x;
-            besty = y;
-            bestscore = diff;
-          }
+            move->setX(x);
+            move->setY(y);
+
+            if (this->board->checkMove(move, this->side))
+            {
+                Board * newboard = this->board->copy();
+                newboard->doMove(move, this->side);
+
+                int min = LARGE;
+
+                for (int x1 = 0; x1 < 8; x1++)
+                {
+                    for (int y1 = 0; y1 < 8; y1++)
+                    {
+                        next->setX(x1);
+                        next->setY(y1);
+
+                        if (newboard->checkMove(next, other))
+                        {
+                            int diff = testingMinimax ? -(newboard->test_score(next, other))
+                            	: -(newboard->score(next, other));
+                            if (diff < min) min = diff;
+                        }
+                    }
+                }
+                
+                int cur_score = (testingMinimax ? board->test_score(move, side)
+                            	: board->score(move, side)) + min;
+                
+                if (cur_score > minimax)
+                {
+                    minimax = cur_score;
+                    bestx = x;
+                    besty = y;
+                }
+                delete newboard;
+            }
         }
-      }
     }
+    
+    delete next;
+
     move->setX(bestx);
     move->setY(besty);
     this->board->doMove(move, this->side);
+
     return move;
-  }
-
-if (testingMinimax == true)
-{
-  Move * move = new Move(0, 0);
-  Move * next = new Move(0, 0);
-  Side other;
-  if (this->side == BLACK) other = WHITE;
-  else other = BLACK;
-
-
-  this->board->doMove(opponentsMove, other);
-
-
-
-  if (!this->board->hasMoves(this->side)) return nullptr;
-
-  int bestx = 0;
-  int besty = 0;
-  int minimax = -100;
-  for (int x = 0; x < 8; x++)
-  {
-    for (int y = 0; y < 8; y++)
-    {
-      move->setX(x);
-      move->setY(y);
-
-      if (this->board->checkMove(move, this->side))
-      {
-
-        Board * newboard = this->board->copy();
-        newboard->doMove(move, this->side);
-
-        int min = 100;
-
-        for (int x1 = 0; x1 < 8; x1++)
-        {
-          for (int y1 = 0; y1 < 8; y1++)
-          {
-            next->setX(x1);
-            next->setY(y1);
-
-            if (newboard->checkMove(next, other))
-            {
-              int diff = -(newboard->score(next, other));
-              if (diff < min) min = diff;
-            }
-          }
-        }
-        if (min > minimax)
-        {
-          minimax = min;
-          bestx = x;
-          besty = y;
-        }
-        delete newboard;
-      }
-    }
-  }
-  move->setX(bestx);
-  move->setY(besty);
-  this->board->doMove(move, this->side);
-  return move;
-}
 }

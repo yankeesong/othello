@@ -6,6 +6,8 @@
 #include "board.hpp"
 using namespace std;
 
+constexpr int LARGE = 99999;
+
 class Player {
 
 public:
