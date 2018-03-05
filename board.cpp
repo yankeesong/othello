@@ -186,8 +186,12 @@ int Board::score(Move *m, Side side)
         int tx = m->x + dx[i], ty = m->y + dy[i];
 
         int tmp = 0;
-        while (tx >= 0 && tx < 8 && ty >= 0 && ty < 8) {
+        while (true) {
             // nothing taken
+            if (tx < 0 || tx >= 8 || ty < 0 || ty >= 8) {
+            	tmp = 0;
+            	break;
+            }
             if (!occupied(tx, ty)) {
                 tmp = 0;
                 break;
