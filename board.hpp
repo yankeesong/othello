@@ -5,12 +5,7 @@
 #include "common.hpp"
 using namespace std;
 
-// define values for board positions
-constexpr int CORNER = 10;
-constexpr int NEAR_CORNER = -8;
-constexpr int BORDER = 5;
-
-constexpr int VALUE[][8] = 
+constexpr int VALUE[8][8] =
 	{{10, -3,  5,  5,  5,  5, -3, 10},
 	 {-3, -8, -2, -2, -2, -2, -8, -3},
 	 { 5, -2,  1,  1,  1,  1, -2,  5},

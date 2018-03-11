@@ -168,7 +168,7 @@ int Board::test_score(Move *m, Side side) {
     Board *newboard = this->copy();
 
     Side other = (side == BLACK) ? WHITE : BLACK;
-    
+
     newboard->doMove(m, side);
 
     int diff = newboard->count(side) - newboard->count(other);
@@ -186,13 +186,17 @@ int Board::score(Move *m, Side side)
         int tx = m->x + dx[i], ty = m->y + dy[i];
 
         int tmp = 0;
-        while (tx >= 0 && tx < 8 && ty >= 0 && ty < 8) {
+        while (true) {
             // nothing taken
+            if (tx < 0 || tx >= 8 || ty < 0 || ty >= 8) {
+            	tmp = 0;
+            	break;
+            }
             if (!occupied(tx, ty)) {
                 tmp = 0;
                 break;
             }
-            
+
             // same side, then we reach the end of flipping stones
             if (get(side, tx, ty)) break;
             // flip stone from the other side
@@ -201,7 +205,6 @@ int Board::score(Move *m, Side side)
                 tx += dx[i], ty += dy[i];
             }
         }
-
         ret += tmp;
     }
 
