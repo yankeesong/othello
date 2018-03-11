@@ -49,8 +49,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     Side other = (this->side == BLACK) ? WHITE : BLACK;
     board->doMove(opponentsMove, other);
 
-    Move *ret = new Move(-1, -1);
-
+    Move *ret = nullptr;
 
     int dep = 4;
     while (time_last_iter * MULTIPLIER < turn_time) {
@@ -91,8 +90,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
 
         if (bestx < 0) break;
 
-        ret->setX(bestx);
-        ret->setY(besty);
+        ret = new Move(bestx, besty);
 
         auto end = chrono::system_clock::now();
         auto d = chrono::duration<double>(end - start);
@@ -100,13 +98,14 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         time_last_iter = int(d.count() * 1000 + 0.5);
         turn_time -= time_last_iter;
         dep += 1;
-        cerr << dep << ' ' << time_last_iter << endl;
+        //cerr << dep << ' ' << time_last_iter << endl;
         if (dep >= moves_left*2) break;
         //std::cerr<<"next round, depth is now "<<dep<<std::endl;
 
     }
 
-    this->board->doMove(ret, this->side);
+    if (ret) this->board->doMove(ret, this->side);
+
     return ret;
 }
 
