@@ -1,5 +1,5 @@
 CC          = g++
-CFLAGS      = -std=c++11 -Wall -pedantic -ggdb
+CFLAGS      = -O2 -std=c++11 -Wall -pedantic
 OBJS        = player.o board.o
 PLAYERNAME  = A+_level_player
 

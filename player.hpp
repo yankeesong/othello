@@ -4,9 +4,13 @@
 #include <iostream>
 #include "common.hpp"
 #include "board.hpp"
+#include <chrono>
+
 using namespace std;
 
-constexpr int LARGE = 99999;
+constexpr int MULTIPLIER = 10;
+
+constexpr int LARGE = 999999;
 
 class Player {
 
@@ -15,6 +19,8 @@ public:
     ~Player();
 
     Move *doMove(Move *opponentsMove, int msLeft);
+
+    int alphabeta(Board *b, int depth, int alpha, int beta, Side s);
 
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;
