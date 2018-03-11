@@ -38,13 +38,14 @@ Player::~Player() {
  * return nullptr.
  */
 Move *Player::doMove(Move *opponentsMove, int msLeft) {
-
+    //cerr << "Time Left: " << msLeft << endl;
     int time_last_iter = 0;
 
     int moves_left = (64 - board->countBlack() - board->countWhite() + 1) / 2;
     int turn_time = (msLeft > 0) ? (msLeft / moves_left) : LARGE;
-
-    if (turn_time > 30000) turn_time = 30000;
+    
+    // aditional mid-game time strength
+    if (moves_left < 20 && moves_left > 10) turn_time *= 2;
 
     Side other = (this->side == BLACK) ? WHITE : BLACK;
     board->doMove(opponentsMove, other);
