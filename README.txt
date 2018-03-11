@@ -15,12 +15,12 @@ black and white pieces, with special scores for the pieces at the corner, near t
 and at the border. We pick the move with the highest score. This player can beat the 
 Simpleplayer about 70 percent of the time.
 
-	Next, we improved out heuristic functions, which takes into account the pieces near
+	Next, we improved out heuristic function, which takes into account the pieces near
 the border as well. Also, we took into account the opponent's pieces we flipped into
-the score funtion. Using the new score function, we built a minimax tree of depth 2, 
+the score function. Using the new score function, we built a minimax tree of depth 2, 
 and chose the move with the best score. This player can beat Simpleplayer, Constant-
 timeplayer, as well as the Betterplayer. In the test tournament, we ranked 9th.
 
-	Finally, we extend the minimax tree. With alpha-beta pruning, we search as far as
+	Finally, we extended the minimax tree. With alpha-beta pruning, we search as far as
 we think the time limit allows (on average, the searching depth is 8). This player can 
 beat Simpleplayer, Constanttimeplayer, Betterplayer, as well as our previous player.
