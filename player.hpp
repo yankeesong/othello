@@ -9,7 +9,7 @@
 using namespace std;
 
 
-constexpr int MULTIPLIER = 10;
+constexpr int MULTIPLIER = 5;
 
 constexpr int LARGE = 999999;
 
@@ -21,7 +21,7 @@ public:
 
     Move *doMove(Move *opponentsMove, int msLeft);
 
-    int alphabeta(Board *b, int depth, int *alpha, int *beta, Side s);
+    int alphabeta(Board *b, int val, int depth, int alpha, int beta, Side s);
 
     // Flag to tell if the player is running within the test_minimax context
     bool testingMinimax;

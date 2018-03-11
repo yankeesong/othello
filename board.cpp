@@ -178,6 +178,17 @@ int Board::test_score(Move *m, Side side) {
     return diff - (this->count(side) - this->count(other));
 }
 
+
+int Board::score(Side side) {
+	int ret = 0;
+	
+	for (int i = 0; i < 8; ++i)
+		for(int j = 0; j < 8; ++j)
+			if(get(side, i, j)) ret += VALUE[i][j];
+
+	return ret;
+}
+
 int Board::score(Move *m, Side side)
 {
     int ret = VALUE[m->x][m->y];

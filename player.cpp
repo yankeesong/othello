@@ -52,7 +52,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     Move *ret = new Move(-1, -1);
 
 
-    int dep = 1;
+    int dep = 4;
     while (time_last_iter * MULTIPLIER < turn_time) {
         auto start = chrono::system_clock::now();
 
@@ -70,16 +70,12 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
                     Board * newboard = this->board->copy();
 
                     int v = newboard->score(m, this->side);
-                    std::cerr<<"move score is"<<v<<std::endl;
+                    //std::cerr<<"move score is"<<v<<std::endl;
                     newboard->doMove(m, this->side);
-                    std::cerr<<"did move "<<x<<"and"<<y<<std::endl;
-                    int *alpha, *beta;
-                    alpha = new int(-LARGE);
-                    beta = new int(LARGE);
-                    v += Player::alphabeta(newboard, dep, alpha, beta, other);
-                    delete alpha;
-                    delete beta;
-                    std::cerr<<"final score is"<<v<<std::endl;
+                    //std::cerr<<"did move "<<x<<"and"<<y<<std::endl;
+                    v += Player::alphabeta(newboard, newboard->score(this->side), 
+                    	dep, -LARGE, LARGE, other);
+                    //std::cerr<<"final score is"<<v<<std::endl;
                     if (v > best_score) {
                         best_score = v;
                         bestx = x, besty = y;
@@ -91,7 +87,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         }
         delete m;
 
-        std::cerr<<"best move is "<<bestx<<"and"<<besty<<std::endl;
+        //std::cerr<<"best move is "<<bestx<<"and"<<besty<<std::endl;
 
         if (bestx < 0) break;
 
@@ -104,8 +100,9 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         time_last_iter = int(d.count() * 1000 + 0.5);
         turn_time -= time_last_iter;
         dep += 1;
-        if (dep >= 10) break;
-        std::cerr<<"next round, depth is now "<<dep<<std::endl;
+        cerr << dep << ' ' << time_last_iter << endl;
+        if (dep >= moves_left*2) break;
+        //std::cerr<<"next round, depth is now "<<dep<<std::endl;
 
     }
 
@@ -113,11 +110,11 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
     return ret;
 }
 
-int Player::alphabeta(Board *b, int depth, int *alpha, int *beta, Side side) {
+int Player::alphabeta(Board *b, int val, int depth, int alpha, int beta, Side side) {
     Side other = (side == BLACK) ? WHITE : BLACK;
 
-    if (depth == 0) return 0;
-    if (!b->hasMoves(side)) return 0;
+    if (depth == 0) return val;
+    
     if (side == this->side)
     {
       int v = -LARGE;
@@ -131,20 +128,23 @@ int Player::alphabeta(Board *b, int depth, int *alpha, int *beta, Side side) {
               if (b->checkMove(m, side)) {
                   Board * newboard = b->copy();
 
-                  int newv = newboard->score(m, side);
+				  int newv = val;
+                  newv += newboard->score(m, side);
                   newboard->doMove(m, side);
 
-                  newv += Player::alphabeta(newboard, depth-1, alpha, beta, other);
+                  newv += alphabeta(newboard, newv, depth-1, alpha, beta, other);
                   delete newboard;
+                  
                   if (newv > v) v = newv;
-                  if (v > *alpha) *alpha = v;
-                  if (*beta <= *alpha) break;
-
-
+                  if (v > alpha) alpha = v;
+                  if (beta <= alpha) break;
               }
           }
       }
       delete m;
+      
+      if (v == -LARGE) return alphabeta(b, val, depth-1, alpha, beta, other);
+      
       return v;
     }
 
@@ -162,20 +162,25 @@ int Player::alphabeta(Board *b, int depth, int *alpha, int *beta, Side side) {
               if (b->checkMove(m, side)) {
                   Board * newboard = b->copy();
 
-                  int newv = -newboard->score(m, side);
+				  int newv = val;
+                  newv -= newboard->score(m, side);
                   newboard->doMove(m, side);
 
-                  newv += Player::alphabeta(newboard, depth-1, alpha, beta, other);
+                  newv += alphabeta(newboard, newv, depth-1, alpha, beta, other);
                   delete newboard;
+                  
                   if (newv < v) v = newv;
-                  if (v < *beta) *beta = v;
-                  if (*beta <= *alpha) break;
-
-
+                  if (v < beta) beta = v;
+                  if (beta <= alpha) break;
               }
           }
       }
       delete m;
+      
+      if (v == LARGE) return alphabeta(b, val, depth-1, alpha, beta, other);
+      
       return v;
     }
+    
+    return 0;
 }
