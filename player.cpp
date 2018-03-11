@@ -104,7 +104,7 @@ Move *Player::doMove(Move *opponentsMove, int msLeft) {
         time_last_iter = int(d.count() * 1000 + 0.5);
         turn_time -= time_last_iter;
         dep += 1;
-        if (dep >= 9) break;
+        if (dep >= 10) break;
         std::cerr<<"next round, depth is now "<<dep<<std::endl;
 
     }
